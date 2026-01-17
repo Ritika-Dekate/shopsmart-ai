@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Feedback | ShopSmart AI</title>
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+        #starRating {
+            font-size: 28px;
+            cursor: pointer;
+            user-select: none;
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<header class="navbar">
+    <h1 class="logo">ShopSmart AI</h1>
+    <nav id="navLinks">
+        <a href="index.html">Home</a>
+        <a href="products.html">Products</a>
+        <a href="cart.html">
+            Cart <span id="cartCount" class="cart-badge">0</span>
+        </a>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+        <a href="feedback.html" class="active">Feedback</a>
+    </nav>
+</header>
+
+<!-- FEEDBACK SECTION -->
+<section class="products">
+    <div class="product">
+        <h2>We Value Your Feedback 💬</h2>
+
+        <form id="feedbackForm">
+
+            <!-- STAR RATING -->
+            <div id="starRating">
+                <span class="star" data-value="1">☆</span>
+                <span class="star" data-value="2">☆</span>
+                <span class="star" data-value="3">☆</span>
+                <span class="star" data-value="4">☆</span>
+                <span class="star" data-value="5">☆</span>
+            </div>
+
+            <br>
+
+            <textarea id="message" rows="4" placeholder="Your Feedback" required></textarea><br><br>
+
+            <button class="btn" type="submit">Submit Feedback</button>
+        </form>
+
+        <p id="successMsg" style="display:none; color:green; margin-top:15px;">
+            ✅ Thank you for your feedback!
+        </p>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer>© 2026 ShopSmart AI</footer>
+
+<!-- CART COUNT -->
+<script>
+function updateCartCount() {
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    let count = 0;
+    cart.forEach(item => count += item.quantity || 1);
+    const badge = document.getElementById("cartCount");
+    if (badge) badge.innerText = count;
+}
+updateCartCount();
+</script>
+
+<!-- STAR RATING SCRIPT -->
+<script>
+let selectedRating = 0;
+const stars = document.querySelectorAll(".star");
+
+stars.forEach(star => {
+
+    // CLICK
+    star.addEventListener("click", () => {
+        selectedRating = star.dataset.value;
+        updateStars(selectedRating);
+    });
+
+    // HOVER
+    star.addEventListener("mouseover", () => {
+        updateStars(star.dataset.value);
+    });
+
+    // RESET AFTER HOVER
+    star.addEventListener("mouseout", () => {
+        updateStars(selectedRating);
+    });
+});
+
+function updateStars(rating) {
+    stars.forEach(star => {
+        star.classList.toggle("active", star.dataset.value <= rating);
+    });
+}
+</script>
+
+
+<!-- FEEDBACK SUBMIT -->
+<script>
+document.getElementById("feedbackForm").addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    const user = JSON.parse(localStorage.getItem("loggedInUser"));
+    if (!user) {
+        alert("Please login to submit feedback");
+        window.location.href = "login.html";
+        return;
+    }
+
+    if (selectedRating === 0) {
+        alert("Please select a star rating");
+        return;
+    }
+
+    const feedback = {
+        name: user.name,
+        rating: selectedRating,
+        text: document.getElementById("message").value,
+        date: new Date().toLocaleString()
+    };
+
+    let feedbacks = JSON.parse(localStorage.getItem("feedbacks")) || [];
+    feedbacks.push(feedback);
+    localStorage.setItem("feedbacks", JSON.stringify(feedbacks));
+
+    document.getElementById("successMsg").style.display = "block";
+    selectedRating = 0;
+    stars.textContent = "☆☆☆☆☆";
+    this.reset();
+});
+</script>
+
+<!-- LOGIN / LOGOUT / ADMIN -->
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const user = JSON.parse(localStorage.getItem("loggedInUser"));
+    const nav = document.getElementById("navLinks");
+
+    if (user && user.role === "admin") {
+        const adminLink = document.createElement("a");
+        adminLink.href = "admin.html";
+        adminLink.innerText = "Admin";
+        nav.appendChild(adminLink);
+    }
+
+    if (user) {
+        const logout = document.createElement("a");
+        logout.href = "#";
+        logout.innerText = "Logout";
+        logout.onclick = () => {
+            localStorage.removeItem("loggedInUser");
+            alert("Logged out successfully");
+            window.location.href = "login.html";
+        };
+        nav.appendChild(logout);
+    } else {
+        const login = document.createElement("a");
+        login.href = "login.html";
+        login.innerText = "Login";
+        nav.appendChild(login);
+    }
+});
+</script>
+
+</body>
+</html>

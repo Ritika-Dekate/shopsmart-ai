@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Products</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+
+    
+        
+<header class="navbar">
+
+    <h1 class="logo">ShopSmart AI</h1>
+
+    <nav id="navLinks">
+    <a href="index.html">Home</a>
+    <a href="products.html">Products</a>
+
+    <a href="cart.html">
+        Cart <span id="cartCount" class="cart-badge">0</span>
+    </a>
+
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
+    <a href="feedback.html">Feedback</a>
+    
+</nav>
+
+</header>
+
+<div style="text-align:center; margin:20px;">
+    <input
+        type="text"
+        id="searchInput"
+        placeholder="Search products..."
+        onkeyup="searchProducts()"
+        style="width:60%; padding:10px;"
+    >
+</div>
+
+
+<body>
+
+<header>
+    <h1>Products</h1>
+</header>
+
+<section class="products">
+
+<div class="product">
+    <img src="images/headphone.jpg">
+    <h3>Wireless Headphones</h3>
+    <p class="price">₹2,999</p>
+    <a href="product-details.html?product=headphone" class="btn">View Details</a>
+</div>
+
+<div class="product">
+    <img src="images/smartwatch.jpg">
+    <h3>Smart Watch</h3>
+    <p class="price">₹4,999</p>
+    <a href="product-details.html?product=watch" class="btn">View Details</a>
+</div>
+
+<div class="product">
+    <img src="images/laptop.jpg">
+    <h3>Laptop Pro</h3>
+    <p class="price">₹69,999</p>
+    <a href="product-details.html?product=laptop" class="btn">View Details</a>
+</div>
+
+<div class="product">
+    <img src="images/phone.jpg">
+    <h3>IPhone 16</h3>
+    <p class="price">₹1,29,999</p>
+    <a href="product-details.html?product=phone" class="btn">View Details</a>
+</div>
+
+</section>
+
+<script>
+function updateCartCount() {
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    let count = 0;
+
+    cart.forEach(item => count += item.quantity);
+
+    const badge = document.getElementById("cartCount");
+    if (badge) badge.innerText = count;
+}
+
+updateCartCount();
+</script>
+
+<script>
+function searchProducts() {
+    const input = document.getElementById("searchInput").value.toLowerCase();
+    const products = document.getElementsByClassName("product");
+
+    for (let i = 0; i < products.length; i++) {
+        const name = products[i].querySelector("h3").innerText.toLowerCase();
+
+        products[i].style.display =
+            name.includes(input) ? "block" : "none";
+    }
+}
+</script>
+
+<script>
+const links = document.querySelectorAll(".navbar nav a");
+const current = window.location.pathname.split("/").pop();
+
+links.forEach(link => {
+    if (link.getAttribute("href") === current) {
+        link.classList.add("active");
+    }
+});
+</script>
+
+<script>
+let selectedRating = 0;
+const stars = document.getElementById("starRating");
+
+stars.addEventListener("click", (e) => {
+    selectedRating = e.target.innerText.length;
+    stars.innerText = "★".repeat(selectedRating) + "☆".repeat(5 - selectedRating);
+});
+
+function submitReview() {
+    const reviewText = document.getElementById("reviewText").value;
+    if (!reviewText || selectedRating === 0) {
+        alert("Please rate and write a review");
+        return;
+    }
+
+    const product = new URLSearchParams(window.location.search).get("product");
+    let reviews = JSON.parse(localStorage.getItem("reviews")) || {};
+
+    if (!reviews[product]) reviews[product] = [];
+
+    reviews[product].push({
+        rating: selectedRating,
+        text: reviewText
+    });
+
+    localStorage.setItem("reviews", JSON.stringify(reviews));
+    document.getElementById("reviewText").value = "";
+    loadReviews();
+}
+
+function loadReviews() {
+    const product = new URLSearchParams(window.location.search).get("product");
+    const reviews = JSON.parse(localStorage.getItem("reviews")) || {};
+    const container = document.getElementById("reviews");
+    container.innerHTML = "";
+
+    if (!reviews[product]) return;
+
+    reviews[product].forEach(r => {
+        container.innerHTML += `
+            <p>⭐ ${r.rating}/5<br>${r.text}</p><hr>
+        `;
+    });
+}
+
+loadReviews();
+</script>
+
+<script>
+const user = JSON.parse(localStorage.getItem("loggedInUser"));
+const nav = document.getElementById("navLinks");
+
+if (!nav) return;
+
+// ADMIN LINK
+if (user && user.role === "admin") {
+    const adminLink = document.createElement("a");
+    adminLink.href = "admin.html";
+    adminLink.innerText = "Admin";
+    nav.appendChild(adminLink);
+}
+
+// LOGIN / LOGOUT
+if (user) {
+    const logout = document.createElement("a");
+    logout.href = "#";
+    logout.innerText = "Logout";
+    logout.onclick = () => {
+        localStorage.removeItem("loggedInUser");
+        alert("Logged out successfully");
+        window.location.href = "login.html";
+    };
+    nav.appendChild(logout);
+} else {
+    const login = document.createElement("a");
+    login.href = "login.html";
+    login.innerText = "Login";
+    nav.appendChild(login);
+}
+</script>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+    const user = JSON.parse(localStorage.getItem("loggedInUser"));
+    const nav = document.getElementById("navLinks");
+
+    if (!nav) {
+        console.error("navLinks not found");
+        return;
+    }
+
+    // ADMIN LINK
+    if (user && user.role === "admin") {
+        const adminLink = document.createElement("a");
+        adminLink.href = "admin.html";
+        adminLink.innerText = "Admin";
+        nav.appendChild(adminLink);
+    }
+
+    // LOGIN / LOGOUT
+    if (user) {
+        const logout = document.createElement("a");
+        logout.href = "#";
+        logout.innerText = "Logout";
+        logout.onclick = () => {
+            localStorage.removeItem("loggedInUser");
+            alert("Logged out successfully");
+            window.location.href = "login.html";
+        };
+        nav.appendChild(logout);
+    } else {
+        const login = document.createElement("a");
+        login.href = "login.html";
+        login.innerText = "Login";
+        nav.appendChild(login);
+    }
+});
+</script>
+
+
+
+<footer>© 2026 ShopSmart AI</footer>
+
+</body>
+</html>

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Dashboard | ShopSmart AI</title>
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+        .admin-section {
+            margin-top: 20px;
+        }
+
+        .review-box {
+            background: #f9f9f9;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<header class="navbar">
+    <h1 class="logo">ShopSmart AI</h1>
+    <nav id="navLinks">
+        <a href="index.html">Home</a>
+        <a href="products.html">Products</a>
+        <a href="admin.html" class="active">Admin</a>
+    </nav>
+</header>
+
+<section class="products">
+    <div class="product">
+        <h2>📊 Admin Dashboard</h2>
+
+        <!-- ================= REVIEWS ================= -->
+        <div class="admin-section">
+            <h3>⭐ Product Reviews</h3>
+            <div id="reviewData"></div>
+        </div>
+
+        <!-- ================= CONTACT ================= -->
+        <div class="admin-section">
+            <h3>📞 Contact Messages</h3>
+            <div id="contactData"></div>
+        </div>
+
+        <!-- ================= FEEDBACK ================= -->
+        <div class="admin-section">
+            <h3>💬 User Feedback</h3>
+            <div id="feedbackData"></div>
+        </div>
+
+    </div>
+</section>
+
+<footer>© 2026 ShopSmart AI</footer>
+
+<!-- ================= SCRIPTS ================= -->
+<script>
+/* 🔐 ADMIN PROTECTION */
+const user = JSON.parse(localStorage.getItem("loggedInUser"));
+if (!user || user.role !== "admin") {
+    alert("Unauthorized access ❌");
+    window.location.href = "login.html";
+}
+
+/* ================= REVIEWS ================= */
+const reviews = JSON.parse(localStorage.getItem("reviews")) || {};
+const reviewDiv = document.getElementById("reviewData");
+
+if (Object.keys(reviews).length === 0) {
+    reviewDiv.innerHTML = "<p>No product reviews yet.</p>";
+} else {
+    for (let product in reviews) {
+        reviewDiv.innerHTML += `<h4>📦 ${product}</h4>`;
+        reviews[product].forEach(r => {
+            reviewDiv.innerHTML += `
+                <div class="review-box">
+                    👤 <b>${r.name}</b><br>
+                    ⭐ ${r.rating}/5<br>
+                    📝 ${r.text}
+                </div>
+            `;
+        });
+    }
+}
+
+/* ================= CONTACT ================= */
+const contacts = JSON.parse(localStorage.getItem("contacts")) || [];
+const contactDiv = document.getElementById("contactData");
+
+if (contacts.length === 0) {
+    contactDiv.innerHTML = "<p>No contact messages.</p>";
+} else {
+    contacts.forEach(c => {
+        contactDiv.innerHTML += `
+            <div class="review-box">
+                👤 <b>${c.name}</b><br>
+                📧 ${c.email}<br>
+                📝 ${c.message}<br>
+                🕒 ${c.date}
+            </div>
+        `;
+    });
+}
+
+/* ================= FEEDBACK ================= */
+const feedbacks = JSON.parse(localStorage.getItem("feedbacks")) || [];
+const feedbackDiv = document.getElementById("feedbackData");
+
+if (feedbacks.length === 0) {
+    feedbackDiv.innerHTML = "<p>No feedback submitted.</p>";
+} else {
+    feedbacks.forEach(f => {
+        feedbackDiv.innerHTML += `
+            <div class="review-box">
+                👤 <b>${f.name}</b><br>
+                ⭐ ${f.rating}/5<br>
+                📝 ${f.text}
+            </div>
+        `;
+    });
+}
+
+/* ================= NAV LOGIN / LOGOUT ================= */
+const nav = document.getElementById("navLinks");
+
+const logout = document.createElement("a");
+logout.href = "#";
+logout.innerText = "Logout";
+logout.onclick = () => {
+    localStorage.removeItem("loggedInUser");
+    alert("Logged out successfully");
+    window.location.href = "login.html";
+};
+nav.appendChild(logout);
+</script>
+
+</body>
+</html>

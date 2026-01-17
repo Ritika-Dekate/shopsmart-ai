@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login | ShopSmart AI</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+
+
+
+<!-- NAVBAR -->
+<header class="navbar">
+
+    <h1 class="logo">ShopSmart AI</h1>
+    <nav id="navLinks">
+        <a href="index.html">Home</a>
+        <a href="products.html">Products</a>
+        <a href="cart.html">
+            Cart <span id="cartCount" class="cart-badge">0</span>
+        </a>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+        <a href="feedback.html">Feedback</a>
+        
+    </nav>
+</header>
+
+<!-- LOGIN FORM -->
+<section class="products">
+    <div class="product">
+        <h2>Login</h2>
+
+        <input type="text" id="username" placeholder="Username"><br><br>
+        <input type="password" id="password" placeholder="Password"><br><br>
+
+        <button class="btn" onclick="login()">Login</button>
+
+        <p style="margin-top:10px; color:#555;">
+            Demo Users:<br>
+            👤 user / user123<br>
+            🔐 admin / admin123
+        </p>
+    </div>
+</section>
+
+<footer>© 2026 ShopSmart AI</footer>
+
+<!-- ================== SCRIPTS ================== -->
+
+<script>
+function login() {
+    const username = document.getElementById("username").value.trim();
+    const password = document.getElementById("password").value.trim();
+
+    if (!username || !password) {
+        alert("Please enter username and password");
+        return;
+    }
+
+    /* ADMIN LOGIN */
+    if (username === "admin" && password === "admin123") {
+        localStorage.setItem("loggedInUser", JSON.stringify({
+            name: "Admin",
+            role: "admin"
+        }));
+
+        alert("Admin login successful 🔐");
+        window.location.href = "admin.html";
+        return;
+    }
+
+    /* NORMAL USER LOGIN (ANY NAME) */
+    localStorage.setItem("loggedInUser", JSON.stringify({
+        name: username,   // ⭐ REAL USER NAME
+        role: "user"
+    }));
+
+    alert(`Welcome ${username} 👋`);
+    window.location.href = "index.html";
+}
+</script>
+
+
+<!-- CART COUNT -->
+<script>
+function updateCartCount() {
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    let count = 0;
+    cart.forEach(item => count += item.quantity || 1);
+
+    const badge = document.getElementById("cartCount");
+    if (badge) badge.innerText = count;
+}
+updateCartCount();
+</script>
+
+<!-- ACTIVE NAV -->
+<script>
+const links = document.querySelectorAll(".navbar nav a");
+const current = window.location.pathname.split("/").pop();
+
+links.forEach(link => {
+    if (link.getAttribute("href") === current) {
+        link.classList.add("active");
+    }
+});
+</script>
+
+<script>
+const user = JSON.parse(localStorage.getItem("loggedInUser"));
+const nav = document.getElementById("navLinks");
+
+if (!nav) return;
+
+// ADMIN LINK
+if (user && user.role === "admin") {
+    const adminLink = document.createElement("a");
+    adminLink.href = "admin.html";
+    adminLink.innerText = "Admin";
+    nav.appendChild(adminLink);
+}
+
+// LOGIN / LOGOUT
+if (user) {
+    const logout = document.createElement("a");
+    logout.href = "#";
+    logout.innerText = "Logout";
+    logout.onclick = () => {
+        localStorage.removeItem("loggedInUser");
+        alert("Logged out successfully");
+        window.location.href = "login.html";
+    };
+    nav.appendChild(logout);
+} else {
+    const login = document.createElement("a");
+    login.href = "login.html";
+    login.innerText = "Login";
+    nav.appendChild(login);
+}
+</script>
+
+
+
+</body>
+</html>
