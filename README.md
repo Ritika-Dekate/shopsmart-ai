@@ -80,4 +80,7 @@ https://ritika-dekate.github.io/shopsmart-ai/
 ## Screenshots
 
 <img width="975" height="314" alt="image" src="https://github.com/user-attachments/assets/a4ac35f2-4200-42a2-958e-e1e35bbe750b" />
+<img width="1915" height="851" alt="Screenshot 2026-01-18 174359" src="https://github.com/user-attachments/assets/96e3b8ae-4909-4f6a-baf1-e9e95889473c" />
+
+
 
