@@ -1,6 +1,6 @@
 # 🛒 ShopSmart AI – Smart E-Commerce Website
 
-ShopSmart AI is a fully front-end based **AI-inspired e-commerce website** developed using **HTML, CSS, and JavaScript**.  
+**ShopSmart AI** is a fully front-end based **AI-inspired e-commerce website** developed using **HTML, CSS, and JavaScript**.  
 The project demonstrates core web development concepts such as authentication, role-based access, cart management, reviews, feedback, and admin dashboards using **LocalStorage**.
 
 🔗 **Live Website:**  
@@ -56,5 +56,4 @@ https://ritika-dekate.github.io/shopsmart-ai/
 
 ---
 
-## 📂 Project Structure
 
