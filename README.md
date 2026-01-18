@@ -75,4 +75,9 @@ https://ritika-dekate.github.io/shopsmart-ai/
 - Online payment gateway integration
 - Secure authentication using JWT
 
+---
+
+## Screenshots
+
+<img width="975" height="314" alt="image" src="https://github.com/user-attachments/assets/a4ac35f2-4200-42a2-958e-e1e35bbe750b" />
 
