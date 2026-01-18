@@ -56,4 +56,23 @@ https://ritika-dekate.github.io/shopsmart-ai/
 
 ---
 
+## 🎯 Learning Outcomes
+
+- Frontend project architecture
+- Authentication without backend (LocalStorage-based login)
+- DOM manipulation using JavaScript
+- Event handling and form validation
+- Git & GitHub workflow
+- Hosting websites using GitHub Pages
+
+---
+
+## 🔮 Future Enhancements
+
+- Backend integration using Node.js or Firebase
+- Real-time database integration (MongoDB / MySQL)
+- AI-based product recommendation system
+- Online payment gateway integration
+- Secure authentication using JWT
+
 
